@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { format } from 'date-fns'
 
 import { CreateOrderPayload, Order, ORDER_STATUS } from './order.type'
@@ -52,7 +53,7 @@ function updateOrder(id: string, updateAttrs: any): Order | null {
 // BOT services
 async function createBot(): Promise<Bot> {
   const newBot: Bot = {
-    id: botId,
+    id: botId++,
     status: BOT_STATUS.IDLE,
     createdAt: Date.now(),
     orderId: null,
@@ -62,7 +63,7 @@ async function createBot(): Promise<Bot> {
   return newBot;
 }
 
-function processOrder(bot: Bot, order: Order) {
+function processOrder(bot: Bot, order: Order): Promise<void>{
   return new Promise(resolve => {
     bot.status = BOT_STATUS.WORKING;
     bot.orderId = order.id
@@ -72,6 +73,7 @@ function processOrder(bot: Bot, order: Order) {
         order.status = ORDER_STATUS.COMPLETE;
         bot.status = BOT_STATUS.IDLE;
       }
+      resolve();
     }, 10000)
   })
 }

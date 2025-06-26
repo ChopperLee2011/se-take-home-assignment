@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server';
 import { createBot, getBots, removeLatestBot } from '../orders/order.service';
 
-export async function POST(req: Request) {
+export async function POST() {
   try {
     const newBot = await createBot();
     return NextResponse.json(newBot, {status: 201})
@@ -27,6 +27,7 @@ export async function DELETE() {
     removeLatestBot();
     return NextResponse.json({ success: true });
   } catch (err) {
+    console.error('#Bot API DELETE error', err);
     return NextResponse.json({ error: 'Failed to delete bot.' }, { status: 500 });
   }
 }
